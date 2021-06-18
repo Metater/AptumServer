@@ -13,7 +13,7 @@ namespace AptumServer
         public AptumServerListener listener;
         public NetManager server;
 
-        public ClientManager clientManager;
+        public PeerClientIdMap peerClientIdMap = new PeerClientIdMap();
         public List<AptumGame> games = new List<AptumGame>();
 
         public Random rand = new Random();
@@ -24,13 +24,11 @@ namespace AptumServer
             server = new NetManager(listener);
             listener.NetManager(this, server);
             server.Start(12733);
-
-            clientManager = new ClientManager(this);
         }
 
         public void Tick(long id)
         {
-            clientManager.Tick(id);
+            
         }
 
         public bool ClientIdInGame(int id)
@@ -40,6 +38,25 @@ namespace AptumServer
                 if (aptumGame.ContainsClientId(id)) return true;
             }
             return false;
+        }
+
+        public bool GetGameWithClientId(int id, out AptumGame outAptumGame)
+        {
+            foreach (AptumGame aptumGame in games)
+            {
+                if (aptumGame.ContainsClientId(id))
+                {
+                    outAptumGame = aptumGame;
+                    return true;
+                }
+            }
+            outAptumGame = null;
+            return false;
+        }
+
+        public void AddClient(NetPeer peer)
+        {
+            peerClientIdMap.AddPeer(peer);
         }
     }
 }

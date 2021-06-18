@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AptumServer.Utils;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -16,7 +17,7 @@ namespace AptumServer.GameData
         public string otherName;
         public AptumBoard otherBoard;
 
-        public int pieceGenerationSeed;
+        private PieceGenerator pieceGenerator;
 
         public AptumGame(AptumServer aptumServer, int leaderId, string leaderName)
         {
@@ -32,7 +33,7 @@ namespace AptumServer.GameData
             this.otherId = otherId;
             this.otherName = otherName;
             otherBoard = new AptumBoard(otherId);
-            pieceGenerationSeed = aptumServer.rand.Next();
+            pieceGenerator = new PieceGenerator(aptumServer.rand.Next());
         }
 
         public void Tick(long id)
@@ -51,6 +52,13 @@ namespace AptumServer.GameData
                 if (id == leaderId) return true;
             }
             return false;
+        }
+
+        public AptumBoard GetBoardFromId(int id)
+        {
+            if (id == leaderId) return leaderBoard;
+            else if (id == otherId) return otherBoard;
+            return null;
         }
     }
 }

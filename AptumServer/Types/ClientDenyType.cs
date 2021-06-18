@@ -9,6 +9,6 @@ namespace AptumServer.Types
     {
         StartLobby = 1 << 0,
         JoinLobby = 1 << 1,
-
+        PlacePiece = 1 << 2,
     }
 }
