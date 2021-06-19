@@ -80,11 +80,14 @@ namespace AptumServer
             {
 
             }
-            else
+        }
+        private void OnRequestJoinLobbyPacketReceived(RequestJoinLobbyPacket packet, NetPeer peer)
+        {
+            int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
+            bool inGame = aptumServer.ClientIdInGame(clientId);
+            if (!inGame)
             {
-                ClientDenyPacket clientDenyPacket = new ClientDenyPacket
-                { ClientDenyBitField = (long)ClientDenyType.StartLobby };
-                peer.Send(packetProcessor.Write(clientDenyPacket), DeliveryMethod.ReliableOrdered);
+                
             }
         }
         private void OnRequestStartGameReceived(RequestStartGamePacket packet, NetPeer peer)
@@ -95,7 +98,6 @@ namespace AptumServer
         private void OnRequestPlacePieceReceived(RequestPlacePiecePacket packet, NetPeer peer)
         {
             int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
-            bool deny = true;
             if (packet.SlotToPlacePieceFrom >= 0 && packet.SlotToPlacePieceFrom <= 3)
             {
                 if (aptumServer.GetGameWithClientId(clientId, out AptumGame aptumGame))
@@ -104,15 +106,8 @@ namespace AptumServer
                     if (aptumPlayer.board.CheckPieceFit((packet.RootX, packet.RootY), PieceDictionary.GetPiece(aptumPlayer.piecePool[packet.SlotToPlacePieceFrom].Item1)))
                     {
                         aptumGame.PlacePieceFromSlot(clientId, packet.SlotToPlacePieceFrom, packet.RootX, packet.RootY);
-                        deny = false;
                     }
                 }
-            }
-            if (deny)
-            {
-                ClientDenyPacket clientDenyPacket = new ClientDenyPacket
-                { ClientDenyBitField = (long)ClientDenyType.PlacePiece };
-                peer.Send(packetProcessor.Write(clientDenyPacket), DeliveryMethod.ReliableOrdered);
             }
         }
         private void OnRequestPlayAgainReceived(RequestPlayAgainPacket packet, NetPeer peer)

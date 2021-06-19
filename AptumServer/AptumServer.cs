@@ -54,6 +54,20 @@ namespace AptumServer
             return false;
         }
 
+        public bool GetGameIfJoinCodeValid(int joinCode, out outAptumGame)
+        {
+            foreach (AptumGame aptumGame in games)
+            {
+                if (!aptumGame.started && !aptumGame.full && aptumGame.joinCode == joinCode)
+                {
+                    outAptumGame = aptumGame;
+                    return true;
+                }
+            }
+            outAptumGame = null;
+            return false;
+        }
+
         public void AddClient(NetPeer peer)
         {
             peerClientIdMap.AddPeer(peer);
