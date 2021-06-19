@@ -42,6 +42,6 @@ namespace AptumServer.Packets
     }
     public class LobbyClosePacket
     {
-
+        public int LobbyCloseReason { get; set; }
     }
 }

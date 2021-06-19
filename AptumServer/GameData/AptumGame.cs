@@ -9,31 +9,39 @@ namespace AptumServer.GameData
     {
         private AptumServer aptumServer;
 
-        public int leaderId;
-        public string leaderName;
-        public AptumBoard leaderBoard;
+        public AptumPlayer leader = new AptumPlayer();
         public bool full = false;
-        public int otherId;
-        public string otherName;
-        public AptumBoard otherBoard;
+        public AptumPlayer other = new AptumPlayer();
 
         private PieceGenerator pieceGenerator;
 
         public AptumGame(AptumServer aptumServer, int leaderId, string leaderName)
         {
             this.aptumServer = aptumServer;
-            this.leaderId = leaderId;
-            this.leaderName = leaderName;
-            leaderBoard = new AptumBoard(leaderId);
+            leader.id = leaderId;
+            leader.name = leaderName;
+            leader.board = new AptumBoard(leaderId);
         }
 
         public void Join(int otherId, string otherName)
         {
             if (full) return;
-            this.otherId = otherId;
-            this.otherName = otherName;
-            otherBoard = new AptumBoard(otherId);
+
+            other.id = otherId;
+            other.name = otherName;
+            other.board = new AptumBoard(otherId);
+
             pieceGenerator = new PieceGenerator(aptumServer.rand.Next());
+
+            for (int i = 0; i < 3; i++)
+            {
+                (int, int) piece = pieceGenerator.GetPieceAtIndex(i);
+                leader.piecePool[i] = piece;
+                other.piecePool[i] = piece;
+            }
+
+            leader.nextPieceIndex = 3;
+            other.nextPieceIndex = 3;
         }
 
         public void Tick(long id)
@@ -45,20 +53,32 @@ namespace AptumServer.GameData
         {
             if (full)
             {
-                if (id == leaderId || id == otherId) return true;
+                if (id == leader.id || id == other.id) return true;
             }
             else
             {
-                if (id == leaderId) return true;
+                if (id == leader.id) return true;
             }
             return false;
         }
 
-        public AptumBoard GetBoardFromId(int id)
+        public AptumPlayer GetPlayerFromId(int id)
         {
-            if (id == leaderId) return leaderBoard;
-            else if (id == otherId) return otherBoard;
+            if (id == leader.id) return leader;
+            else if (id == other.id) return other;
             return null;
+        }
+
+        public void PlacePieceFromSlot(int id, int slot, int rootX, int rootY)
+        {
+            AptumPlayer aptumPlayer = GetPlayerFromId(id);
+            if (aptumPlayer is null) return;
+            aptumPlayer.board.PlacePiece((rootX, rootY), PieceDictionary.GetPiece(aptumPlayer.piecePool[slot].Item1));
+            aptumPlayer.piecePool[slot] = pieceGenerator.GetPieceAtIndex(aptumPlayer.nextPieceIndex);
+            aptumPlayer.nextPieceIndex++;
+
+            // Do wipe check
+
         }
     }
 }

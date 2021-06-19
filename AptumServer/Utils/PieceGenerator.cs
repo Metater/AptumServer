@@ -16,15 +16,19 @@ namespace AptumServer.Utils
             rand = new Random(seed);
         }
 
-        private (int, int) GetPieceAtIndex(int index)
+        public (int, int) GetPieceAtIndex(int index)
         {
-            if (index > GreatestPieceIndexCached)
+            int numPiecesToGenerate = GreatestPieceIndexCached - index;
+            if (numPiecesToGenerate > 0)
             {
-                int pieceType = rand.Next(PieceDictionary.GetPieceCount() - 1);
-                int pieceColor = rand.Next(PieceDictionary.NumPieceColors - 1);
-                (int, int) piece = (pieceType, pieceColor);
-                cachedPieces.Add(piece);
-                return piece;
+                for (int i = 0; i < numPiecesToGenerate; i++)
+                {
+                    int pieceType = rand.Next(PieceDictionary.GetPieceCount() - 1);
+                    int pieceColor = rand.Next(PieceDictionary.NumPieceColors - 1);
+                    (int, int) piece = (pieceType, pieceColor);
+                    cachedPieces.Add(piece);
+                }
+                return cachedPieces[index];
             }
             else
             {
