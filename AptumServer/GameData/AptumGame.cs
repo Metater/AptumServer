@@ -10,8 +10,10 @@ namespace AptumServer.GameData
         private AptumServer aptumServer;
 
         public AptumPlayer leader = new AptumPlayer();
+        public int joinCode;
         public bool full = false;
         public AptumPlayer other = new AptumPlayer();
+        public bool started = false;
 
         private PieceGenerator pieceGenerator;
 
@@ -21,6 +23,7 @@ namespace AptumServer.GameData
             leader.id = leaderId;
             leader.name = leaderName;
             leader.board = new AptumBoard(leaderId);
+            joinCode = aptumServer.rand.Next();
         }
 
         public void Join(int otherId, string otherName)

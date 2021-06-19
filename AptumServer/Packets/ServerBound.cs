@@ -9,6 +9,10 @@ namespace AptumServer.Packets
         public string LeaderName { get; set; }
         public int RequestedGameMode { get; set; }
     }
+    public class RequestJoinLobbyPacket
+    {
+        public int JoinCode  {get; set; }
+    }
     public class RequestStartGamePacket
     {
 
