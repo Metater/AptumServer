@@ -11,7 +11,8 @@ namespace AptumServer.Packets
     }
     public class RequestJoinLobbyPacket
     {
-        public int JoinCode  {get; set; }
+        public int JoinCode  { get; set; }
+        public string Name { get; set; }
     }
     public class RequestStartGamePacket
     {
