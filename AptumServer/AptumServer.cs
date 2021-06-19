@@ -54,12 +54,13 @@ namespace AptumServer
             return false;
         }
 
-        public bool GetGameIfJoinCodeValid(int joinCode, out outAptumGame)
+        public bool TryJoinGame(int clientId, string clientName, int joinCode, out outAptumGame)
         {
             foreach (AptumGame aptumGame in games)
             {
                 if (!aptumGame.started && !aptumGame.full && aptumGame.joinCode == joinCode)
                 {
+                    aptumGame.Join(clientId, clientName);
                     outAptumGame = aptumGame;
                     return true;
                 }
