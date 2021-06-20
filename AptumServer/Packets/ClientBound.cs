@@ -26,11 +26,6 @@ namespace AptumServer.Packets
         public int RootX { get; set; }
         public int RootY { get; set; }
     }
-    public class LineWipedPacket
-    {
-        public int Index { get; set; }
-        public bool Horizontal { get; set; }
-    }
     public class GameEndedPacket
     {
         public int LeaderScore { get; set; }

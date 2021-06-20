@@ -54,7 +54,7 @@ namespace AptumServer
             return false;
         }
 
-        public bool TryJoinGame(int clientId, string clientName, int joinCode, out outAptumGame)
+        public bool TryJoinGame(int clientId, string clientName, int joinCode, out AptumGame outAptumGame)
         {
             foreach (AptumGame aptumGame in games)
             {

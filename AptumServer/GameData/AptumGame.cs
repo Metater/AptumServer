@@ -23,7 +23,7 @@ namespace AptumServer.GameData
             leader.id = leaderId;
             leader.name = leaderName;
             leader.board = new AptumBoard(leaderId);
-            joinCode = aptumServer.rand.Next();
+            joinCode = aptumServer.rand.Next(1000);
         }
 
         public void Join(int otherId, string otherName)

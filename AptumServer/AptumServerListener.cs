@@ -61,11 +61,6 @@ namespace AptumServer
         public void OnPeerConnected(NetPeer peer)
         {
             aptumServer.peerClientIdMap.AddPeer(peer);
-            RequestCreateLobbyPacket startLobbyPacket = new RequestCreateLobbyPacket
-            {
-                LeaderName = "Server"
-            };
-            peer.Send(packetProcessor.Write(startLobbyPacket), DeliveryMethod.ReliableOrdered);
         }
         public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
         {
@@ -76,10 +71,6 @@ namespace AptumServer
         {
             int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
             bool inGame = aptumServer.ClientIdInGame(clientId);
-            if (!inGame && aptumServer.TryJoinGame(clientId, packet.Name, packet.JoinCode, out AptumGame aptumGame))
-            {
-
-            }
         }
         private void OnRequestJoinLobbyPacketReceived(RequestJoinLobbyPacket packet, NetPeer peer)
         {
@@ -108,7 +99,7 @@ namespace AptumServer
             if (packet.SlotToPlacePieceFrom >= 0 && packet.SlotToPlacePieceFrom <= 3)
             {
                 if (aptumServer.GetGameWithClientId(clientId, out AptumGame aptumGame))
-                
+                {
                     AptumPlayer aptumPlayer = aptumGame.GetPlayerFromId(clientId);
                     if (aptumPlayer.board.CheckPieceFit((packet.RootX, packet.RootY), PieceDictionary.GetPiece(aptumPlayer.piecePool[packet.SlotToPlacePieceFrom].Item1)))
                     {

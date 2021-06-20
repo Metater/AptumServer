@@ -28,4 +28,5 @@ namespace AptumServer.Packets
     {
         public bool PlayAgain { get; set; }
     }
+    // Add request leave lobby packet, to close game later
 }

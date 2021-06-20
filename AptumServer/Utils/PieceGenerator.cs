@@ -13,6 +13,7 @@ namespace AptumServer.Utils
 
         public PieceGenerator(int seed)
         {
+            this.seed = seed;
             rand = new Random(seed);
         }
 
