@@ -11,6 +11,7 @@ namespace AptumShared
         public bool[,] Board { get; private set; } = new bool[8, 8];
         public Piece[] PiecePool { get; private set; } = new Piece[3];
         public bool[] PiecePoolBool { get; private set; } = new bool[3];
+
         public event Action<(int, int)> OnPlaceCell;
         public event Action<(int, int)> OnRemoveCell;
         public event Action<int> OnWipedLines;
