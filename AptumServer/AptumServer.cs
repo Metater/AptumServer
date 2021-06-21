@@ -4,7 +4,7 @@ using System.Text;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using AptumServer.GameData;
-using AptumServer.Packets;
+using AptumShared.Packets;
 
 namespace AptumServer
 {
@@ -17,6 +17,8 @@ namespace AptumServer
         public List<AptumGame> games = new List<AptumGame>();
 
         public Random rand = new Random();
+
+        public List<int> joinCodes = new List<int>();
         
         public AptumServer()
         {

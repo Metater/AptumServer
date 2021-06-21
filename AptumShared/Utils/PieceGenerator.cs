@@ -1,32 +1,33 @@
-﻿using System;
+﻿using AptumShared.Enums;
+using AptumShared.Structs;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AptumServer.Utils
+namespace AptumShared.Utils
 {
     public class PieceGenerator
     {
-        private int seed;
         private Random rand;
-        private List<(int, int)> cachedPieces = new List<(int, int)>();
+        private List<Piece> cachedPieces = new List<Piece>();
         private int GreatestPieceIndexCached => cachedPieces.Count - 1;
 
         public PieceGenerator(int seed)
         {
-            this.seed = seed;
             rand = new Random(seed);
         }
 
-        public (int, int) GetPieceAtIndex(int index)
+        public Piece GetPieceAtIndex(int index)
         {
-            int numPiecesToGenerate = GreatestPieceIndexCached - index;
+            int numPiecesToGenerate = index - GreatestPieceIndexCached;
             if (numPiecesToGenerate > 0)
             {
                 for (int i = 0; i < numPiecesToGenerate; i++)
                 {
-                    int pieceType = rand.Next(PieceDictionary.GetPieceCount() - 1);
-                    int pieceColor = rand.Next(PieceDictionary.NumPieceColors - 1);
-                    (int, int) piece = (pieceType, pieceColor);
+                    int type = rand.Next(PieceDictionary.GetPieceCount() - 1);
+                    int color = rand.Next(PieceDictionary.NumPieceColors - 1);
+                    Piece piece = PieceDictionary.GetPiece((PieceType)type);
+                    piece.SetColor((ColorType)color);
                     cachedPieces.Add(piece);
                 }
                 return cachedPieces[index];

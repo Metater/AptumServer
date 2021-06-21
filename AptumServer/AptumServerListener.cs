@@ -5,10 +5,10 @@ using System.Net.Sockets;
 using System.Text;
 using LiteNetLib;
 using LiteNetLib.Utils;
-using AptumServer.Packets;
+using AptumShared.Packets;
 using AptumServer.Types;
 using AptumServer.GameData;
-using AptumServer.Utils;
+using AptumShared;
 
 namespace AptumServer
 {

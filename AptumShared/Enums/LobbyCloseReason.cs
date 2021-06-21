@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AptumServer.Types
+namespace AptumShared.Enums
 {
-    public enum LobbyCloseReasonType
+    public enum LobbyCloseReason
     {
         DenyPlayAgain,
         OpponentUnexpectedlyDisconnected

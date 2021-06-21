@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AptumServer.Types
+namespace AptumShared.Enums
 {
-    public enum GameModeType
+    public enum GameMode
     {
-        MostLinesInTime
+        HighestScoreInTime
     }
 }

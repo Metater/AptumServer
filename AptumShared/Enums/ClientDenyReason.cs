@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AptumServer.Types
+namespace AptumShared.Enums
 {
     [Flags]
-    public enum ClientDenyType : long
+    public enum ClientDenyReason : long
     {
         JoinLobby = 1 << 0,
     }

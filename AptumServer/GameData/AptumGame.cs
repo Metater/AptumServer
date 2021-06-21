@@ -1,7 +1,8 @@
-﻿using AptumServer.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using AptumShared;
+using AptumShared.Utils;
 
 namespace AptumServer.GameData
 {
@@ -9,42 +10,34 @@ namespace AptumServer.GameData
     {
         private AptumServer aptumServer;
 
-        public AptumPlayer leader = new AptumPlayer();
+        public AptumPlayer leader;
         public int joinCode;
         public bool full = false;
-        public AptumPlayer other = new AptumPlayer();
+        public AptumPlayer other;
         public bool started = false;
-
-        private PieceGenerator pieceGenerator;
 
         public AptumGame(AptumServer aptumServer, int leaderId, string leaderName)
         {
             this.aptumServer = aptumServer;
-            leader.id = leaderId;
-            leader.name = leaderName;
-            leader.board = new AptumBoard(leaderId);
-            joinCode = aptumServer.rand.Next(1000);
+            leader = new AptumPlayer(leaderId, leaderName, new AptumBoard());
+            joinCode = -1;
+            while (!aptumServer.joinCodes.Contains(joinCode))
+            {
+                joinCode = aptumServer.rand.Next(1000);
+                aptumServer.joinCodes.Add(joinCode);
+            }
         }
 
         public void Join(int otherId, string otherName)
         {
             if (full) return;
 
-            other.id = otherId;
-            other.name = otherName;
-            other.board = new AptumBoard(otherId);
+            other = new AptumPlayer(otherId, otherName, new AptumBoard());
 
-            pieceGenerator = new PieceGenerator(aptumServer.rand.Next());
-
-            for (int i = 0; i < 3; i++)
-            {
-                (int, int) piece = pieceGenerator.GetPieceAtIndex(i);
-                leader.piecePool[i] = piece;
-                other.piecePool[i] = piece;
-            }
-
-            leader.nextPieceIndex = 3;
-            other.nextPieceIndex = 3;
+            int pieceGenSeed = aptumServer.rand.Next();
+            PieceGenerator pieceGenerator = new PieceGenerator(pieceGenSeed);
+            leader.board.AddPieceGenerator(pieceGenerator);
+            other.board.AddPieceGenerator(pieceGenerator);
         }
 
         public void Tick(long id)
@@ -76,7 +69,7 @@ namespace AptumServer.GameData
         {
             AptumPlayer aptumPlayer = GetPlayerFromId(id);
             if (aptumPlayer is null) return;
-            aptumPlayer.board.PlacePiece((rootX, rootY), PieceDictionary.GetPiece(aptumPlayer.piecePool[slot].Item1));
+            aptumPlayer.board.PlacePiece((rootX, rootY), PieceDictionary.GetPiece(aptumPlayer.piecePool[slot]));
             aptumPlayer.piecePool[slot] = pieceGenerator.GetPieceAtIndex(aptumPlayer.nextPieceIndex);
             aptumPlayer.nextPieceIndex++;
 

@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Packets\PacketData\" />
+    <ProjectReference Include="..\AptumShared\AptumShared.csproj" />
   </ItemGroup>
 
 </Project>
