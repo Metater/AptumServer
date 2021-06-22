@@ -18,7 +18,7 @@ namespace AptumServer
 
         public Random rand = new Random();
 
-        public List<int> joinCodes = new List<int>();
+        public Dictionary<int, AptumGame> joinCodeGameMap = new Dictionary<int, AptumGame>();
         
         public AptumServer()
         {
@@ -40,6 +40,11 @@ namespace AptumServer
                 if (aptumGame.ContainsClientId(id)) return true;
             }
             return false;
+        }
+
+        public void CreateLobby()
+        {
+
         }
 
         public bool GetGameWithClientId(int id, out AptumGame outAptumGame)

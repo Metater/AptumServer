@@ -10,34 +10,43 @@ namespace AptumServer.GameData
     {
         private AptumServer aptumServer;
 
-        public AptumPlayer leader;
-        public int joinCode;
+        public List<AptumPlayer> players = new List<AptumPlayer>();
+        public int joinCode = -1;
         public bool full = false;
-        public AptumPlayer other;
         public bool started = false;
+
+        private PieceGenerator pieceGenerator;
+        private int pieceGenSeed;
 
         public AptumGame(AptumServer aptumServer, int leaderId, string leaderName)
         {
             this.aptumServer = aptumServer;
-            leader = new AptumPlayer(leaderId, leaderName, new AptumBoard());
-            joinCode = -1;
-            while (!aptumServer.joinCodes.Contains(joinCode))
+            players.Add(new AptumPlayer(leaderId, leaderName, new AptumBoard()));
+
+            int tries = 0;
+            while (!aptumServer.joinCodeGameMap.ContainsKey(joinCode))
             {
+                if (tries >= 100) throw new Exception("Need larger join code!");
                 joinCode = aptumServer.rand.Next(1000);
-                aptumServer.joinCodes.Add(joinCode);
+                aptumServer.joinCodeGameMap.Add(joinCode, this);
+                tries++;
             }
+
+            pieceGenSeed = aptumServer.rand.Next();
+            pieceGenerator = new PieceGenerator(pieceGenSeed);
+
+            players[0].board.AddPieceGenerator(pieceGenerator);
         }
 
         public void Join(int otherId, string otherName)
         {
             if (full) return;
 
-            other = new AptumPlayer(otherId, otherName, new AptumBoard());
+            players.Add(new AptumPlayer(otherId, otherName, new AptumBoard()));
 
             int pieceGenSeed = aptumServer.rand.Next();
             PieceGenerator pieceGenerator = new PieceGenerator(pieceGenSeed);
-            leader.board.AddPieceGenerator(pieceGenerator);
-            other.board.AddPieceGenerator(pieceGenerator);
+            players[1].board.AddPieceGenerator(pieceGenerator);
         }
 
         public void Tick(long id)
@@ -47,22 +56,12 @@ namespace AptumServer.GameData
 
         public bool ContainsClientId(int id)
         {
-            if (full)
-            {
-                if (id == leader.id || id == other.id) return true;
-            }
-            else
-            {
-                if (id == leader.id) return true;
-            }
-            return false;
+            return players.Exists((player) => player.id == id);
         }
 
         public AptumPlayer GetPlayerFromId(int id)
         {
-            if (id == leader.id) return leader;
-            else if (id == other.id) return other;
-            return null;
+            return players.Find((player) => player.id == id);
         }
 
         public void PlacePieceFromSlot(int id, int slot, int rootX, int rootY)

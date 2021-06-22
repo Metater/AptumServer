@@ -6,9 +6,9 @@ using System.Text;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using AptumShared.Packets;
-using AptumServer.Types;
 using AptumServer.GameData;
 using AptumShared;
+using AptumShared.Enums;
 
 namespace AptumServer
 {
@@ -83,7 +83,7 @@ namespace AptumServer
             else
             {
                 ClientDenyPacket clientDenyPacket = new ClientDenyPacket
-                { ClientDenyBitField = (long)ClientDenyType.JoinLobby };
+                { ClientDenyBitField = (long)ClientDenyReason.JoinLobby };
                 peer.Send(packetProcessor.Write(clientDenyPacket), DeliveryMethod.ReliableOrdered);
 
             }
