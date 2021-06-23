@@ -5,6 +5,7 @@ using LiteNetLib;
 using LiteNetLib.Utils;
 using AptumServer.GameData;
 using AptumShared.Packets;
+using AptumShared;
 
 namespace AptumServer
 {
@@ -38,27 +39,28 @@ namespace AptumServer
             return games.Exists((aptumGame) => aptumGame.ContainsClientId(id));
         }
 
-        public void CreateLobby()
+        public void CreateLobby(AptumPlayer leader)
         {
-
+            games.Add(new AptumGame(this, leader));
         }
 
         public bool GetGameWithClientId(int id, out AptumGame outAptumGame)
         {
-            foreach (AptumGame aptumGame in games)
-            {
-                if (aptumGame.ContainsClientId(id))
-                {
-                    outAptumGame = aptumGame;
-                    return true;
-                }
-            }
-            outAptumGame = null;
-            return false;
+            outAptumGame = games.Find((aptumGame) => aptumGame.ContainsClientId(id));
+            return outAptumGame != null;
+        }
+
+        public bool GetGameWithJoinCode(int joinCode, out AptumGame aptumGame)
+        {
+            return joinCodeGameMap.TryGetValue(joinCode, out aptumGame);
         }
 
         public bool TryJoinGame(int clientId, string clientName, int joinCode, out AptumGame outAptumGame)
         {
+            if (GetGameWithJoinCode(joinCode, out AptumGame aptumGame))
+            {
+
+            }
             foreach (AptumGame aptumGame in games)
             {
                 if (!aptumGame.started && !aptumGame.full && aptumGame.joinCode == joinCode)

@@ -18,10 +18,10 @@ namespace AptumServer.GameData
         private PieceGenerator pieceGenerator;
         private int pieceGenSeed;
 
-        public AptumGame(AptumServer aptumServer, int leaderId, string leaderName)
+        public AptumGame(AptumServer aptumServer, AptumPlayer leader)
         {
             this.aptumServer = aptumServer;
-            players.Add(new AptumPlayer(leaderId, leaderName, new AptumBoard()));
+            players.Add(leader);
 
             int tries = 0;
             while (!aptumServer.joinCodeGameMap.ContainsKey(joinCode))
@@ -38,11 +38,11 @@ namespace AptumServer.GameData
             players[0].board.AddPieceGenerator(pieceGenerator);
         }
 
-        public void Join(int otherId, string otherName)
+        public void Join(AptumPlayer player)
         {
             if (full) return;
 
-            players.Add(new AptumPlayer(otherId, otherName, new AptumBoard()));
+            players.Add(player);
 
             int pieceGenSeed = aptumServer.rand.Next();
             PieceGenerator pieceGenerator = new PieceGenerator(pieceGenSeed);
@@ -73,6 +73,11 @@ namespace AptumServer.GameData
             aptumPlayer.nextPieceIndex++;
 
             // Do wipe check
+
+        }
+
+        public bool TryJoinGame()
+        {
 
         }
     }
