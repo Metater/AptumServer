@@ -35,11 +35,7 @@ namespace AptumServer
 
         public bool ClientIdInGame(int id)
         {
-            foreach (AptumGame aptumGame in games)
-            {
-                if (aptumGame.ContainsClientId(id)) return true;
-            }
-            return false;
+            return games.Exists((aptumGame) => aptumGame.ContainsClientId(id));
         }
 
         public void CreateLobby()
