@@ -22,6 +22,7 @@ namespace AptumServer
         public AptumServerListener()
         {
             packetProcessor.SubscribeReusable<RequestCreateLobbyPacket, NetPeer>(OnRequestCreateLobbyReceived);
+            packetProcessor.SubscribeReusable<RequestJoinLobbyPacket, NetPeer>(OnRequestJoinLobbyPacketReceived);
             packetProcessor.SubscribeReusable<RequestStartGamePacket, NetPeer>(OnRequestStartGameReceived);
             packetProcessor.SubscribeReusable<RequestPlacePiecePacket, NetPeer>(OnRequestPlacePieceReceived);
             packetProcessor.SubscribeReusable<RequestPlayAgainPacket, NetPeer>(OnRequestPlayAgainReceived);
@@ -71,21 +72,23 @@ namespace AptumServer
         {
             int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
             bool inGame = aptumServer.ClientIdInGame(clientId);
+            if (!inGame && )
         }
         private void OnRequestJoinLobbyPacketReceived(RequestJoinLobbyPacket packet, NetPeer peer)
         {
             int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
             bool inGame = aptumServer.ClientIdInGame(clientId);
-            if (!inGame && aptumServer.TryJoinGame(clientId, packet.Name, packet.JoinCode, out AptumGame aptumGame))
+            if (!inGame && aptumServer.TryJoinGame(new AptumPlayer(clientId, packet.Name, new AptumBoard()), packet.JoinCode, out AptumGame aptumGame))
             {
-                
+                ClientJoinedPacket clientJoinedPacket = new ClientJoinedPacket
+                { Name = packet.Name };
+                aptumServer.BroadcastToPlayersInGameBut(aptumGame, clientId, packetProcessor.Write(clientJoinedPacket), DeliveryMethod.ReliableOrdered);
             }
             else
             {
                 ClientDenyPacket clientDenyPacket = new ClientDenyPacket
                 { ClientDenyBitField = (long)ClientDenyReason.JoinLobby };
                 peer.Send(packetProcessor.Write(clientDenyPacket), DeliveryMethod.ReliableOrdered);
-
             }
         }
         private void OnRequestStartGameReceived(RequestStartGamePacket packet, NetPeer peer)
@@ -101,10 +104,12 @@ namespace AptumServer
                 if (aptumServer.GetGameWithClientId(clientId, out AptumGame aptumGame))
                 {
                     AptumPlayer aptumPlayer = aptumGame.GetPlayerFromId(clientId);
+                    /*
                     if (aptumPlayer.board.CheckPieceFit((packet.RootX, packet.RootY), PieceDictionary.GetPiece(aptumPlayer.piecePool[packet.SlotToPlacePieceFrom].Item1)))
                     {
                         aptumGame.PlacePieceFromSlot(clientId, packet.SlotToPlacePieceFrom, packet.RootX, packet.RootY);
                     }
+                    */
                 }
             }
         }

@@ -50,23 +50,19 @@ namespace AptumServer
             return outAptumGame != null;
         }
 
-        public bool GetGameWithJoinCode(int joinCode, out AptumGame aptumGame)
+        public bool GetGameWithJoinCode(int joinCode, out AptumGame outAptumGame)
         {
-            return joinCodeGameMap.TryGetValue(joinCode, out aptumGame);
+            return joinCodeGameMap.TryGetValue(joinCode, out outAptumGame);
         }
 
-        public bool TryJoinGame(int clientId, string clientName, int joinCode, out AptumGame outAptumGame)
+        public bool TryJoinGame(AptumPlayer player, int joinCode, out AptumGame outAptumGame)
         {
             if (GetGameWithJoinCode(joinCode, out AptumGame aptumGame))
             {
-
-            }
-            foreach (AptumGame aptumGame in games)
-            {
-                if (!aptumGame.started && !aptumGame.full && aptumGame.joinCode == joinCode)
+                if (!aptumGame.started && !aptumGame.full)
                 {
-                    aptumGame.Join(clientId, clientName);
                     outAptumGame = aptumGame;
+                    aptumGame.Join(player);
                     return true;
                 }
             }
@@ -77,6 +73,22 @@ namespace AptumServer
         public void AddClient(NetPeer peer)
         {
             peerClientIdMap.AddPeer(peer);
+        }
+
+        public void BroadcastToPlayersInGame(AptumGame aptumGame, byte[] data, DeliveryMethod deliveryMethod)
+        {
+            foreach (AptumPlayer aptumPlayer in aptumGame.players)
+            {
+                peerClientIdMap.GetPeer(aptumPlayer.id).Send(data, deliveryMethod);
+            }
+        }
+        public void BroadcastToPlayersInGameBut(AptumGame aptumGame, int excludedId, byte[] data, DeliveryMethod deliveryMethod)
+        {
+            foreach (AptumPlayer aptumPlayer in aptumGame.players)
+            {
+                if (aptumPlayer.id == excludedId) continue;
+                peerClientIdMap.GetPeer(aptumPlayer.id).Send(data, deliveryMethod);
+            }
         }
     }
 }

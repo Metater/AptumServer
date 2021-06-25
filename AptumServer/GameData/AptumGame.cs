@@ -21,21 +21,21 @@ namespace AptumServer.GameData
         public AptumGame(AptumServer aptumServer, AptumPlayer leader)
         {
             this.aptumServer = aptumServer;
-            players.Add(leader);
 
             int tries = 0;
-            while (!aptumServer.joinCodeGameMap.ContainsKey(joinCode))
+            while (aptumServer.joinCodeGameMap.ContainsKey(joinCode) || joinCode == -1)
             {
                 if (tries >= 100) throw new Exception("Need larger join code!");
                 joinCode = aptumServer.rand.Next(1000);
-                aptumServer.joinCodeGameMap.Add(joinCode, this);
                 tries++;
             }
+            aptumServer.joinCodeGameMap.Add(joinCode, this);
 
             pieceGenSeed = aptumServer.rand.Next();
             pieceGenerator = new PieceGenerator(pieceGenSeed);
 
-            players[0].board.AddPieceGenerator(pieceGenerator);
+            players.Add(leader);
+            leader.board.AddPieceGenerator(pieceGenerator);
         }
 
         public void Join(AptumPlayer player)
@@ -43,10 +43,7 @@ namespace AptumServer.GameData
             if (full) return;
 
             players.Add(player);
-
-            int pieceGenSeed = aptumServer.rand.Next();
-            PieceGenerator pieceGenerator = new PieceGenerator(pieceGenSeed);
-            players[1].board.AddPieceGenerator(pieceGenerator);
+            player.board.AddPieceGenerator(pieceGenerator);
         }
 
         public void Tick(long id)
@@ -54,31 +51,14 @@ namespace AptumServer.GameData
 
         }
 
-        public bool ContainsClientId(int id)
-        {
-            return players.Exists((player) => player.id == id);
-        }
-
-        public AptumPlayer GetPlayerFromId(int id)
-        {
-            return players.Find((player) => player.id == id);
-        }
+        public bool ContainsClientId(int id) { return players.Exists((player) => player.id == id); }
+        public AptumPlayer GetPlayerFromId(int id) { return players.Find((player) => player.id == id); }
 
         public void PlacePieceFromSlot(int id, int slot, int rootX, int rootY)
         {
             AptumPlayer aptumPlayer = GetPlayerFromId(id);
             if (aptumPlayer is null) return;
-            aptumPlayer.board.PlacePiece((rootX, rootY), PieceDictionary.GetPiece(aptumPlayer.piecePool[slot]));
-            aptumPlayer.piecePool[slot] = pieceGenerator.GetPieceAtIndex(aptumPlayer.nextPieceIndex);
-            aptumPlayer.nextPieceIndex++;
-
-            // Do wipe check
-
-        }
-
-        public bool TryJoinGame()
-        {
-
+            aptumPlayer.board.PlaceSlot(slot, (rootX, rootY));
         }
     }
 }
