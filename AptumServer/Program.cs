@@ -10,7 +10,9 @@ namespace AptumServer
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("[Core] Hello World!");
+            Console.WriteLine("[Core] Aptum Server v0.1");
+            Console.WriteLine("[Core] Starting server...");
 
             AptumServer aptumServer = new AptumServer();
 
@@ -18,6 +20,8 @@ namespace AptumServer
             lastTick.Start();
             long timerTicks = 0;
             long nextTickId = 0;
+
+            Console.WriteLine("[Core] Started polling for incoming data");
 
             while (!Console.KeyAvailable)
             {

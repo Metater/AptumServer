@@ -51,7 +51,7 @@ namespace AptumServer
         }
         public void OnNetworkReceive(NetPeer peer, NetPacketReader reader, DeliveryMethod deliveryMethod)
         {
-            Console.WriteLine("[Server] received data. Processing...");
+            //Console.WriteLine("[Server] received data. Processing...");
             packetProcessor.ReadAllPackets(reader, peer);
             reader.Recycle();
         }
@@ -61,18 +61,28 @@ namespace AptumServer
         }
         public void OnPeerConnected(NetPeer peer)
         {
-            aptumServer.peerClientIdMap.AddPeer(peer);
+            int clientId = aptumServer.peerClientIdMap.AddPeer(peer);
+            Console.WriteLine($"[Server (Client Connected)] Client connected, assigned id {clientId}");
         }
         public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
         {
-
+            int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
+            bool inGame = aptumServer.ClientIdInGame(clientId);
+            Console.WriteLine($"[Server (Client Disconnected)] Client disconnected, with id {clientId}");
         }
 
         private void OnRequestCreateLobbyReceived(RequestCreateLobbyPacket packet, NetPeer peer)
         {
             int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
             bool inGame = aptumServer.ClientIdInGame(clientId);
-            if (!inGame && )
+            if (!inGame)
+            {
+                AptumGame aptumGame = aptumServer.CreateLobby(new AptumPlayer(clientId, packet.LeaderName, new AptumBoard()));
+                Console.WriteLine($"[Action (Created Game)] Client {clientId} named \"{packet.LeaderName}\" made a {(GameMode)packet.RequestedGameMode} game");
+                CreatedLobbyPacket createdLobbyPacket = new CreatedLobbyPacket
+                { JoinCode = aptumGame.joinCode };
+                peer.Send(packetProcessor.Write(createdLobbyPacket), DeliveryMethod.ReliableOrdered);
+            }
         }
         private void OnRequestJoinLobbyPacketReceived(RequestJoinLobbyPacket packet, NetPeer peer)
         {

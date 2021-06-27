@@ -27,6 +27,7 @@ namespace AptumServer
             server = new NetManager(listener);
             listener.NetManager(this, server);
             server.Start(12733);
+            Console.WriteLine("[Core] Server listening for connections on port 12733");
         }
 
         public void Tick(long id)
@@ -39,9 +40,11 @@ namespace AptumServer
             return games.Exists((aptumGame) => aptumGame.ContainsClientId(id));
         }
 
-        public void CreateLobby(AptumPlayer leader)
+        public AptumGame CreateLobby(AptumPlayer leader)
         {
-            games.Add(new AptumGame(this, leader));
+            AptumGame aptumGame = new AptumGame(this, leader);
+            games.Add(aptumGame);
+            return aptumGame;
         }
 
         public bool GetGameWithClientId(int id, out AptumGame outAptumGame)
