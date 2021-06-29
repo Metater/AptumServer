@@ -4,17 +4,21 @@ using System.Text;
 
 namespace AptumShared.Packets
 {
-    public class ClientDenyPacket
+    public class DenyPacket
     {
-        public long ClientDenyBitField { get; set; }
+        public long DenyBitField { get; set; }
     }
     public class CreatedLobbyPacket
     {
         public int JoinCode { get; set; }
     }
-    public class ClientJoinedPacket
+    public class JoinedLobbyPacket
     {
-        public string Name { get; set; }
+
+    }
+    public class AddClientsPacket
+    {
+        public string[] Names { get; set; }
     }
     public class StartGamePacket
     {
@@ -31,7 +35,7 @@ namespace AptumShared.Packets
         public int LeaderScore { get; set; }
         public int OtherScore { get; set; }
     }
-    public class ClientPlayAgainPacket
+    public class PlayAgainPacket
     {
         public bool PlayAgain { get; set; }
     }
