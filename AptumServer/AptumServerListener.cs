@@ -94,9 +94,11 @@ namespace AptumServer
             bool inGame = aptumServer.ClientIdInGame(clientId);
             if (!inGame && aptumServer.TryJoinGame(new AptumPlayer(clientId, packet.Name, new AptumBoard()), packet.JoinCode, out AptumGame aptumGame))
             {
+                /*
                 JoinedLobbyPacket joinedLobbyPacket = new JoinedLobbyPacket
                 { Name = packet.Name, Self = false };
                 aptumServer.BroadcastToPlayersInGameBut(aptumGame, clientId, packetProcessor.Write(joinedLobbyPacket), DeliveryMethod.ReliableOrdered);
+                */
             }
             else
             {
