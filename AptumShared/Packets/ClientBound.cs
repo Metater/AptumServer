@@ -16,7 +16,7 @@ namespace AptumShared.Packets
     {
 
     }
-    public class AddClientsPacket
+    public class UpdateClientsPacket
     {
         public string[] Names { get; set; }
     }
