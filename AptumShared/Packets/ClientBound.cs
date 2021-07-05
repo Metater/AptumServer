@@ -16,9 +16,9 @@ namespace AptumShared.Packets
     {
 
     }
-    public class UpdateClientsPacket
+    public class UpdatePlayersPacket
     {
-        public string[] Names { get; set; }
+        public string[] PlayerNames { get; set; }
     }
     public class StartGamePacket
     {
@@ -26,6 +26,7 @@ namespace AptumShared.Packets
     }
     public class PiecePlacedPacket
     {
+        public int PlayerIndex { get; set; }
         public int SlotToPlacePieceFrom { get; set; }
         public int RootX { get; set; }
         public int RootY { get; set; }
@@ -37,6 +38,7 @@ namespace AptumShared.Packets
     }
     public class PlayAgainPacket
     {
+        public int PlayerIndex { get; set; }
         public bool PlayAgain { get; set; }
     }
     public class LobbyClosePacket

@@ -60,5 +60,15 @@ namespace AptumServer.GameData
             if (aptumPlayer is null) return;
             aptumPlayer.board.PlaceSlot(slot, (rootX, rootY));
         }
+
+        public string[] GetPlayerNames()
+        {
+            List<string> playerNames = new List<string>();
+            foreach (AptumPlayer player in players)
+            {
+                playerNames.Add(player.name);
+            }
+            return playerNames.ToArray();
+        }
     }
 }

@@ -81,7 +81,7 @@ namespace AptumServer
             if (!inGame)
             {
                 AptumGame aptumGame = aptumServer.CreateLobby(new AptumPlayer(clientId, packet.LeaderName, new AptumBoard()));
-                Console.WriteLine($"[Action (Created Game)] Client {clientId} named \"{packet.LeaderName}\" made a {(GameMode)packet.RequestedGameMode} game");
+                Console.WriteLine($"[Action (Created Lobby)] Client {clientId} named \"{packet.LeaderName}\" made a lobby");
                 CreatedLobbyPacket createdLobbyPacket = new CreatedLobbyPacket
                 { JoinCode = aptumGame.joinCode };
                 peer.Send(packetProcessor.Write(createdLobbyPacket), DeliveryMethod.ReliableOrdered);
@@ -94,11 +94,12 @@ namespace AptumServer
             bool inGame = aptumServer.ClientIdInGame(clientId);
             if (!inGame && aptumServer.TryJoinGame(new AptumPlayer(clientId, packet.Name, new AptumBoard()), packet.JoinCode, out AptumGame aptumGame))
             {
-                /*
-                JoinedLobbyPacket joinedLobbyPacket = new JoinedLobbyPacket
-                { Name = packet.Name, Self = false };
-                aptumServer.BroadcastToPlayersInGameBut(aptumGame, clientId, packetProcessor.Write(joinedLobbyPacket), DeliveryMethod.ReliableOrdered);
-                */
+                JoinedLobbyPacket joinedLobbyPacket = new JoinedLobbyPacket();
+                peer.Send(packetProcessor.Write(joinedLobbyPacket), DeliveryMethod.ReliableOrdered);
+
+                UpdatePlayersPacket updatePlayersPacket = new UpdatePlayersPacket
+                { PlayerNames = aptumGame.GetPlayerNames() };
+                aptumServer.BroadcastToPlayersInGame(aptumGame, packetProcessor.Write(updatePlayersPacket), DeliveryMethod.ReliableOrdered);
             }
             else
             {

@@ -7,7 +7,6 @@ namespace AptumShared.Packets
     public class RequestCreateLobbyPacket
     {
         public string LeaderName { get; set; }
-        public int RequestedGameMode { get; set; }
     }
     public class RequestJoinLobbyPacket
     {
@@ -16,7 +15,7 @@ namespace AptumShared.Packets
     }
     public class RequestStartGamePacket
     {
-
+        public int RequestedGameMode { get; set; }
     }
     public class RequestPlacePiecePacket
     {
