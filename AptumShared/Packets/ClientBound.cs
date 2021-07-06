@@ -23,6 +23,7 @@ namespace AptumShared.Packets
     public class StartGamePacket
     {
         public int PieceGenerationSeed { get; set; }
+        public int SelfPlayerIndex { get; set; }
     }
     public class PiecePlacedPacket
     {
