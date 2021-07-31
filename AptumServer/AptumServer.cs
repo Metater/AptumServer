@@ -15,6 +15,7 @@ namespace AptumServer
         public NetManager server;
 
         public PeerClientIdMap peerClientIdMap = new PeerClientIdMap();
+        public List<AptumPlayer> clients = new List<AptumPlayer>();
         public List<AptumGame> games = new List<AptumGame>();
 
         public Random rand = new Random();
@@ -23,9 +24,9 @@ namespace AptumServer
         
         public AptumServer()
         {
-            listener = new AptumServerListener();
+            listener = new AptumServerListener(this);
             server = new NetManager(listener);
-            listener.NetManager(this, server);
+            listener.AddNetManagerReference(server);
             server.Start(12733);
             Console.WriteLine("[Core] Server listening for connections on port 12733");
         }

@@ -6,10 +6,13 @@ namespace AptumServer
 {
     class Program
     {
-        public const long TimePerTick = 500000; // 20 TPS
+        public const double TPS = 20;
+        public const long TimePerTick = (long)(10000000 / TPS);
+        //public const long TimePerTick = 500000; // 20 TPS
 
         static void Main(string[] args)
         {
+            //Console.WriteLine("[Core] Time per tick: " + TimePerTick);
             Console.WriteLine("[Core] Hello World!");
             Console.WriteLine("[Core] Aptum Server v0.1");
             Console.WriteLine("[Core] Starting server...");
@@ -33,6 +36,7 @@ namespace AptumServer
                 {
                     timerTicks -= TimePerTick;
                     aptumServer.Tick(nextTickId);
+                    //Console.WriteLine("[Core] Tick, Id: " + nextTickId);
                     nextTickId++;
                 }
                 Thread.Sleep(1);

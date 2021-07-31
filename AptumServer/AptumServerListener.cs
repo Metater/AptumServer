@@ -19,8 +19,9 @@ namespace AptumServer
 
         public NetPacketProcessor packetProcessor = new NetPacketProcessor();
 
-        public AptumServerListener()
+        public AptumServerListener(AptumServer aptumServer)
         {
+            this.aptumServer = aptumServer;
             packetProcessor.SubscribeReusable<RequestCreateLobbyPacket, NetPeer>(OnRequestCreateLobbyReceived);
             packetProcessor.SubscribeReusable<RequestJoinLobbyPacket, NetPeer>(OnRequestJoinLobbyPacketReceived);
             packetProcessor.SubscribeReusable<RequestStartGamePacket, NetPeer>(OnRequestStartGameReceived);
@@ -28,9 +29,8 @@ namespace AptumServer
             packetProcessor.SubscribeReusable<RequestPlayAgainPacket, NetPeer>(OnRequestPlayAgainReceived);
         }
 
-        public void NetManager(AptumServer aptumServer, NetManager server)
+        public void AddNetManagerReference(NetManager server)
         {
-            this.aptumServer = aptumServer;
             this.server = server;
         }
 
