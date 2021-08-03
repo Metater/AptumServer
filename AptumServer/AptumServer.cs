@@ -13,17 +13,17 @@ namespace AptumServer
     {
         public AptumServerListener listener;
         public NetManager server;
+        public GameManager gameManager;
+
 
         public PeerClientIdMap peerClientIdMap = new PeerClientIdMap();
         public List<AptumPlayer> clients = new List<AptumPlayer>();
-        public List<AptumGame> games = new List<AptumGame>();
 
         public Random rand = new Random();
 
-        public Dictionary<int, AptumGame> joinCodeGameMap = new Dictionary<int, AptumGame>();
-        
         public AptumServer()
         {
+            gameManager = new GameManager(this);
             listener = new AptumServerListener(this);
             server = new NetManager(listener);
             listener.AddNetManagerReference(server);
@@ -34,44 +34,6 @@ namespace AptumServer
         public void Tick(long id)
         {
             
-        }
-
-        public bool ClientIdInGame(int id)
-        {
-            return games.Exists((aptumGame) => aptumGame.ContainsClientId(id));
-        }
-
-        public AptumGame CreateLobby(AptumPlayer leader)
-        {
-            AptumGame aptumGame = new AptumGame(this, leader);
-            games.Add(aptumGame);
-            return aptumGame;
-        }
-
-        public bool GetGameWithClientId(int id, out AptumGame outAptumGame)
-        {
-            outAptumGame = games.Find((aptumGame) => aptumGame.ContainsClientId(id));
-            return outAptumGame != null;
-        }
-
-        public bool GetGameWithJoinCode(int joinCode, out AptumGame outAptumGame)
-        {
-            return joinCodeGameMap.TryGetValue(joinCode, out outAptumGame);
-        }
-
-        public bool TryJoinGame(AptumPlayer player, int joinCode, out AptumGame outAptumGame)
-        {
-            if (GetGameWithJoinCode(joinCode, out AptumGame aptumGame))
-            {
-                if (!aptumGame.started && !aptumGame.full)
-                {
-                    outAptumGame = aptumGame;
-                    aptumGame.Join(player);
-                    return true;
-                }
-            }
-            outAptumGame = null;
-            return false;
         }
 
         public void AddClient(NetPeer peer)

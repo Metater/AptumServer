@@ -16,6 +16,7 @@ namespace AptumServer
     {
         private AptumServer aptumServer;
         private NetManager server;
+        private GameManager gameManager;
 
         public NetPacketProcessor packetProcessor = new NetPacketProcessor();
 
@@ -27,6 +28,7 @@ namespace AptumServer
             packetProcessor.SubscribeReusable<RequestStartGamePacket, NetPeer>(OnRequestStartGameReceived);
             packetProcessor.SubscribeReusable<RequestPlacePiecePacket, NetPeer>(OnRequestPlacePieceReceived);
             packetProcessor.SubscribeReusable<RequestPlayAgainPacket, NetPeer>(OnRequestPlayAgainReceived);
+            gameManager = aptumServer.gameManager;
         }
 
         public void AddNetManagerReference(NetManager server)
@@ -66,9 +68,11 @@ namespace AptumServer
         }
         public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
         {
+            /*
             int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
             bool inGame = aptumServer.ClientIdInGame(clientId);
             Console.WriteLine($"[Server (Client Disconnected)] Client disconnected, with id {clientId}");
+            */
         }
         #endregion NetworkEvents
 
@@ -89,6 +93,7 @@ namespace AptumServer
         }
         private void OnRequestJoinLobbyPacketReceived(RequestJoinLobbyPacket packet, NetPeer peer)
         {
+            /*
             // Do duplicate name check
             int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
             bool inGame = aptumServer.ClientIdInGame(clientId);
@@ -107,33 +112,34 @@ namespace AptumServer
                 { DenyBitField = (long)DenyReason.JoinLobby };
                 peer.Send(packetProcessor.Write(denyPacket), DeliveryMethod.ReliableOrdered);
             }
+            */
         }
         private void OnRequestStartGameReceived(RequestStartGamePacket packet, NetPeer peer)
         {
-            int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
-            bool inGame = aptumServer.ClientIdInGame(clientId);
+            //int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
+            //bool inGame = aptumServer.ClientIdInGame(clientId);
         }
         private void OnRequestPlacePieceReceived(RequestPlacePiecePacket packet, NetPeer peer)
         {
+            /*
             int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
             if (packet.SlotToPlacePieceFrom >= 0 && packet.SlotToPlacePieceFrom <= 3)
             {
                 if (aptumServer.GetGameWithClientId(clientId, out AptumGame aptumGame))
                 {
                     AptumPlayer aptumPlayer = aptumGame.GetPlayerFromId(clientId);
-                    /*
                     if (aptumPlayer.board.CheckPieceFit((packet.RootX, packet.RootY), PieceDictionary.GetPiece(aptumPlayer.piecePool[packet.SlotToPlacePieceFrom].Item1)))
                     {
                         aptumGame.PlacePieceFromSlot(clientId, packet.SlotToPlacePieceFrom, packet.RootX, packet.RootY);
                     }
-                    */
                 }
             }
+            */
         }
         private void OnRequestPlayAgainReceived(RequestPlayAgainPacket packet, NetPeer peer)
         {
-            int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
-            bool inGame = aptumServer.ClientIdInGame(clientId);
+            //int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
+            //bool inGame = aptumServer.ClientIdInGame(clientId);
         }
         #endregion ReceivedPacketImplementation
     }
