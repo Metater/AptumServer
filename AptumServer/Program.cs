@@ -12,6 +12,7 @@ namespace AptumServer
 
         static void Main(string[] args)
         {
+
             Console.WriteLine("[Core] Hello World!");
             Console.WriteLine("[Core] Aptum Server v0.1");
             Console.WriteLine("[Core] Starting server...");

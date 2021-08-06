@@ -80,6 +80,7 @@ namespace AptumServer
         #region ReceivedPacketImplementation
         private void OnRequestCreateLobbyReceived(RequestCreateLobbyPacket packet, NetPeer peer)
         {
+            /*
             int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
             bool inGame = aptumServer.ClientIdInGame(clientId);
             if (!inGame)
@@ -90,6 +91,7 @@ namespace AptumServer
                 { JoinCode = aptumGame.joinCode };
                 peer.Send(packetProcessor.Write(createdLobbyPacket), DeliveryMethod.ReliableOrdered);
             }
+            */
         }
         private void OnRequestJoinLobbyPacketReceived(RequestJoinLobbyPacket packet, NetPeer peer)
         {

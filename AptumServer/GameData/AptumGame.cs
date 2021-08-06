@@ -23,6 +23,7 @@ namespace AptumServer.GameData
             this.aptumServer = aptumServer;
 
             int tries = 0;
+            /*
             while (aptumServer.joinCodeGameMap.ContainsKey(joinCode) || joinCode == -1)
             {
                 if (tries >= 100) throw new Exception("Need larger join code!");
@@ -30,6 +31,7 @@ namespace AptumServer.GameData
                 tries++;
             }
             aptumServer.joinCodeGameMap.Add(joinCode, this);
+            */
 
             pieceGenSeed = aptumServer.rand.Next();
             pieceGenerator = new PieceGenerator(pieceGenSeed);
