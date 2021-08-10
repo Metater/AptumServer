@@ -12,6 +12,8 @@ namespace AptumClient
 
         internal INetSendUpdate netSendUpdate;
         internal IGraphicsUpdate graphicsUpdate;
+        internal IUIWriteUpdate uiWriteUpdate;
+        internal INetworkUpdate networkUpdate;
 
         public AptumClientState AptumClientState;
         public NetReceive NetReceive;
@@ -19,15 +21,21 @@ namespace AptumClient
         public UIRead UIRead;
         public UIWrite UIWrite;
         public Graphics Graphics;
+        public Network Network;
 
-        public void Init()
+        public void Init(INetSendUpdate netSendUpdate, IGraphicsUpdate graphicsUpdate, IUIWriteUpdate uiWriteUpdate, INetworkUpdate networkUpdate)
         {
+            this.netSendUpdate = netSendUpdate;
+            this.graphicsUpdate = graphicsUpdate;
+            this.uiWriteUpdate = uiWriteUpdate;
+            this.networkUpdate = networkUpdate;
             AptumClientState = new AptumClientState();
             NetReceive = new NetReceive();
             NetSend = new NetSend();
             UIRead = new UIRead();
             UIWrite = new UIWrite();
             Graphics = new Graphics();
+            Network = new Network();
         }
     }
 }
