@@ -4,10 +4,10 @@ using System.Text;
 
 namespace AptumClient
 {
-    public sealed class UIIn
+    public sealed class UIRead
     {
 
-        public UIIn()
+        public UIRead()
         {
 
         }

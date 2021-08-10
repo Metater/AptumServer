@@ -7,9 +7,9 @@ namespace AptumClient
 {
     public sealed class NetSend
     {
-        private INetSender netSender;
+        private INetSendUpdate netSender;
 
-        public void SubscribeNetSender(INetSender netSender)
+        public void SubscribeNetSender(INetSendUpdate netSender)
         {
             this.netSender = netSender;
         }

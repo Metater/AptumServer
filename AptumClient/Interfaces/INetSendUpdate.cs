@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AptumClient.Interfaces
 {
-    public interface INetSender
+    public interface INetSendUpdate
     {
         void Send(RequestCreateLobbyPacket packet);
         void Send(RequestJoinLobbyPacket packet);
