@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AptumServer", "AptumServer\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AptumShared", "AptumShared\AptumShared.csproj", "{789EFEBC-38A6-4107-89C4-03F213F02334}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AptumClient", "AptumClient\AptumClient.csproj", "{5553D134-DA58-46C9-B9B0-250209006563}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AptumClient", "AptumClient\AptumClient.csproj", "{5553D134-DA58-46C9-B9B0-250209006563}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
