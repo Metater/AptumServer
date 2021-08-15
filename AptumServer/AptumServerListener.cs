@@ -39,7 +39,7 @@ namespace AptumServer
         #region NetworkEvents
         public void OnConnectionRequest(ConnectionRequest request)
         {
-            if (server.ConnectedPeersCount < 10)
+            if (server.ConnectedPeersCount < 100)
                 request.AcceptIfKey("Aptum");
             else
                 request.Reject();
@@ -63,7 +63,7 @@ namespace AptumServer
         }
         public void OnPeerConnected(NetPeer peer)
         {
-            int clientId = aptumServer.peerClientIdMap.AddPeer(peer);
+            int clientId = aptumServer.AddClient(peer);
             Console.WriteLine($"[Server (Client Connected)] Client connected, assigned id {clientId}");
         }
         public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
@@ -95,6 +95,7 @@ namespace AptumServer
         }
         private void OnRequestJoinLobbyPacketReceived(RequestJoinLobbyPacket packet, NetPeer peer)
         {
+
             /*
             // Do duplicate name check
             int clientId = aptumServer.peerClientIdMap.GetClientId(peer);

@@ -17,7 +17,7 @@ namespace AptumServer
 
 
         public PeerClientIdMap peerClientIdMap = new PeerClientIdMap();
-        public List<AptumPlayer> clients = new List<AptumPlayer>();
+        public List<AptumServerPlayer> players = new List<AptumServerPlayer>();
 
         public Random rand = new Random();
 
@@ -36,9 +36,26 @@ namespace AptumServer
             
         }
 
-        public void AddClient(NetPeer peer)
+        public int AddClient(NetPeer peer)
         {
-            peerClientIdMap.AddPeer(peer);
+            int clientId = peerClientIdMap.AddPeer(peer);
+            AptumPlayer player = new AptumPlayer(clientId, "Unknown", new AptumBoard());
+            players.Add(new AptumServerPlayer(player));
+            return clientId;
+        }
+
+        public bool TryGetPlayer(int clientId, AptumServerPlayer outPlayer)
+        {
+            foreach (AptumServerPlayer player in players)
+            {
+                if (player.player.id == clientId)
+                {
+                    outPlayer = player;
+                    return true;
+                }
+            }
+            outPlayer = null;
+            return false;
         }
 
         public void BroadcastToPlayersInGame(AptumGame aptumGame, byte[] data, DeliveryMethod deliveryMethod)
