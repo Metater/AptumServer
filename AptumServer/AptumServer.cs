@@ -44,7 +44,7 @@ namespace AptumServer
             return clientId;
         }
 
-        public bool TryGetPlayer(int clientId, AptumServerPlayer outPlayer)
+        public bool TryGetPlayer(int clientId, out AptumServerPlayer outPlayer)
         {
             foreach (AptumServerPlayer player in players)
             {
@@ -72,6 +72,13 @@ namespace AptumServer
                 if (aptumPlayer.id == excludedId) continue;
                 peerClientIdMap.GetPeer(aptumPlayer.id).Send(data, deliveryMethod);
             }
+        }
+
+        public void KickClient(int clientId)
+        {
+            gameManager.TryKickPlayer(clientId);
+            AptumServerPlayer player = players.Find((player) => clientId == player.player.id);
+            players.Remove(player);
         }
     }
 }

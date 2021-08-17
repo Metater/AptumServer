@@ -22,7 +22,7 @@ namespace AptumServer
 
         public bool IsClientIdInGame(int id)
         {
-            return games.Exists((aptumGame) => aptumGame.ContainsClientId(id));
+            return games.Exists((aptumGame) => aptumGame.ContainsPlayerId(id));
         }
 
         public AptumGame CreateLobby(AptumPlayer leader)
@@ -34,7 +34,7 @@ namespace AptumServer
 
         public bool TryGetGameWithClientId(int id, out AptumGame outAptumGame)
         {
-            outAptumGame = games.Find((aptumGame) => aptumGame.ContainsClientId(id));
+            outAptumGame = games.Find((aptumGame) => aptumGame.ContainsPlayerId(id));
             return outAptumGame != null;
         }
 
@@ -55,6 +55,21 @@ namespace AptumServer
                 }
             }
             outAptumGame = null;
+            return false;
+        }
+
+        public bool TryKickPlayer(int id)
+        {
+            foreach (AptumGame game in games)
+            {
+                if (game.ContainsPlayerId(id))
+                {
+                    game.KickPlayer(id);
+                    if (aptumServer.TryGetPlayer(id, out AptumServerPlayer player))
+                        player.gameJoinCode = -1;
+                    return true;
+                }
+            }
             return false;
         }
     }

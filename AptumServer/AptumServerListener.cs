@@ -68,11 +68,9 @@ namespace AptumServer
         }
         public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
         {
-            /*
             int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
-            bool inGame = aptumServer.ClientIdInGame(clientId);
             Console.WriteLine($"[Server (Client Disconnected)] Client disconnected, with id {clientId}");
-            */
+            aptumServer.KickClient(clientId);
         }
         #endregion NetworkEvents
 
@@ -80,33 +78,32 @@ namespace AptumServer
         #region ReceivedPacketImplementation
         private void OnRequestCreateLobbyReceived(RequestCreateLobbyPacket packet, NetPeer peer)
         {
-            /*
             int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
-            bool inGame = aptumServer.ClientIdInGame(clientId);
-            if (!inGame)
+            bool inGame = gameManager.IsClientIdInGame(clientId);
+            if (inGame) return;
+            if (aptumServer.TryGetPlayer(clientId, out AptumServerPlayer player))
             {
-                AptumGame aptumGame = aptumServer.CreateLobby(new AptumPlayer(clientId, packet.LeaderName, new AptumBoard()));
+                AptumGame lobby = gameManager.CreateLobby(player.player);
                 Console.WriteLine($"[Action (Created Lobby)] Client {clientId} named \"{packet.LeaderName}\" made a lobby");
                 CreatedLobbyPacket createdLobbyPacket = new CreatedLobbyPacket
-                { JoinCode = aptumGame.joinCode };
+                { JoinCode = lobby.joinCode };
                 peer.Send(packetProcessor.Write(createdLobbyPacket), DeliveryMethod.ReliableOrdered);
             }
-            */
         }
         private void OnRequestJoinLobbyPacketReceived(RequestJoinLobbyPacket packet, NetPeer peer)
         {
-
-            /*
-            // Do duplicate name check
             int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
-            bool inGame = aptumServer.ClientIdInGame(clientId);
-            if (!inGame && aptumServer.TryJoinGame(new AptumPlayer(clientId, packet.Name, new AptumBoard()), packet.JoinCode, out AptumGame aptumGame))
+            bool inGame = gameManager.IsClientIdInGame(clientId);
+            if (inGame) return;
+            AptumServerPlayer player;
+            bool gotPlayer = aptumServer.TryGetPlayer(clientId, out player);
+            if (gotPlayer && gameManager.TryJoinGame(player.player, packet.JoinCode, out AptumGame aptumGame))
             {
                 JoinedLobbyPacket joinedLobbyPacket = new JoinedLobbyPacket();
                 peer.Send(packetProcessor.Write(joinedLobbyPacket), DeliveryMethod.ReliableOrdered);
 
                 UpdatePlayersPacket updatePlayersPacket = new UpdatePlayersPacket
-                { PlayerNames = aptumGame.GetPlayerNames() };
+                { PlayerIds = aptumGame.GetPlayerIds() };
                 aptumServer.BroadcastToPlayersInGame(aptumGame, packetProcessor.Write(updatePlayersPacket), DeliveryMethod.ReliableOrdered);
             }
             else
@@ -115,7 +112,6 @@ namespace AptumServer
                 { DenyBitField = (long)DenyReason.JoinLobby };
                 peer.Send(packetProcessor.Write(denyPacket), DeliveryMethod.ReliableOrdered);
             }
-            */
         }
         private void OnRequestStartGameReceived(RequestStartGamePacket packet, NetPeer peer)
         {

@@ -4,6 +4,7 @@ using System.Text;
 
 namespace AptumShared.Packets
 {
+    // Could make some things shorts
     public class DenyPacket
     {
         public long DenyBitField { get; set; }
@@ -18,7 +19,7 @@ namespace AptumShared.Packets
     }
     public class UpdatePlayersPacket
     {
-        public string[] PlayerNames { get; set; }
+        public int[] PlayerIds { get; set; }
     }
     public class StartGamePacket
     {

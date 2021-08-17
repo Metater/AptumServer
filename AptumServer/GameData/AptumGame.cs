@@ -23,15 +23,13 @@ namespace AptumServer.GameData
             this.aptumServer = aptumServer;
 
             int tries = 0;
-            /*
-            while (aptumServer.joinCodeGameMap.ContainsKey(joinCode) || joinCode == -1)
+            while (aptumServer.gameManager.joinCodeGameMap.ContainsKey(joinCode) || joinCode == -1)
             {
                 if (tries >= 100) throw new Exception("Need larger join code!");
                 joinCode = aptumServer.rand.Next(1000);
                 tries++;
             }
-            aptumServer.joinCodeGameMap.Add(joinCode, this);
-            */
+            aptumServer.gameManager.joinCodeGameMap.Add(joinCode, this);
 
             pieceGenSeed = aptumServer.rand.Next();
             pieceGenerator = new PieceGenerator(pieceGenSeed);
@@ -53,7 +51,7 @@ namespace AptumServer.GameData
 
         }
 
-        public bool ContainsClientId(int id) { return players.Exists((player) => player.id == id); }
+        public bool ContainsPlayerId(int id) { return players.Exists((player) => player.id == id); }
         public AptumPlayer GetPlayerFromId(int id) { return players.Find((player) => player.id == id); }
 
         public void PlacePieceFromSlot(int id, int slot, int rootX, int rootY)
@@ -67,10 +65,33 @@ namespace AptumServer.GameData
         {
             List<string> playerNames = new List<string>();
             foreach (AptumPlayer player in players)
-            {
                 playerNames.Add(player.name);
-            }
             return playerNames.ToArray();
+        }
+
+        public int[] GetPlayerIds()
+        {
+            List<int> playerIds = new List<int>();
+            foreach (AptumPlayer player in players)
+                playerIds.Add(player.id);
+            return playerIds.ToArray();
+        }
+
+        public void KickPlayer(int id)
+        {
+            for (int i = 0; i < players.Count; i++)
+            {
+                if (id == players[i].id)
+                {
+                    players.RemoveAt(id);
+                    if (i == 0) KillGame();
+                }
+            }
+        }
+
+        public void KillGame()
+        {
+
         }
     }
 }
