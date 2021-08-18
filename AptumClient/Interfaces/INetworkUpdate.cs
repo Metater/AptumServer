@@ -6,6 +6,6 @@ namespace AptumClient.Interfaces
 {
     public interface INetworkUpdate
     {
-        void Connect();
+        void Connect(string address, int port, string key);
     }
 }

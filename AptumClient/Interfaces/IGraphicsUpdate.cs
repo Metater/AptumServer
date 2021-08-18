@@ -7,8 +7,8 @@ namespace AptumClient.Interfaces
 {
     public interface IGraphicsUpdate
     {
-        void ClearLine(int boardId);
-        void PlacePiece(int boardId, Piece piece, (int, int) pos);
-        void WipeBoard(int boardId);
+        void ClearLine(int boardIndex);
+        void PlacePiece(int boardIndex, Piece piece, (int, int) pos);
+        void WipeBoard(int boardIndex);
     }
 }

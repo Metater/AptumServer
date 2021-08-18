@@ -36,6 +36,8 @@ namespace AptumClient
             UIWrite = new UIWrite();
             Graphics = new Graphics();
             Network = new Network();
+
+            networkUpdate.Connect("192.168.1.92", 12733, "Aptum");
         }
     }
 }
