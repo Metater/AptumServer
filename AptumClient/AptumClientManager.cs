@@ -1,5 +1,4 @@
 ﻿using AptumClient.Interfaces;
-using System;
 
 namespace AptumClient
 {
@@ -12,28 +11,24 @@ namespace AptumClient
 
         internal INetSendUpdate netSendUpdate;
         internal IGraphicsUpdate graphicsUpdate;
-        internal IUIWriteUpdate uiWriteUpdate;
+        internal IUISendUpdate uiSendUpdate;
         internal INetworkUpdate networkUpdate;
 
-        public AptumClientState AptumClientState;
+        public State State;
         public NetReceive NetReceive;
-        public NetSend NetSend;
-        public UIRead UIRead;
-        public UIWrite UIWrite;
+        public UIReceive UIReceive;
         public Graphics Graphics;
         public Network Network;
 
-        public void Init(INetSendUpdate netSendUpdate, IGraphicsUpdate graphicsUpdate, IUIWriteUpdate uiWriteUpdate, INetworkUpdate networkUpdate)
+        public void Init(INetSendUpdate netSendUpdate, IGraphicsUpdate graphicsUpdate, IUISendUpdate uiSendUpdate, INetworkUpdate networkUpdate)
         {
             this.netSendUpdate = netSendUpdate;
             this.graphicsUpdate = graphicsUpdate;
-            this.uiWriteUpdate = uiWriteUpdate;
+            this.uiSendUpdate = uiSendUpdate;
             this.networkUpdate = networkUpdate;
-            AptumClientState = new AptumClientState();
+            State = new State();
             NetReceive = new NetReceive();
-            NetSend = new NetSend();
-            UIRead = new UIRead();
-            UIWrite = new UIWrite();
+            UIReceive = new UIReceive();
             Graphics = new Graphics();
             Network = new Network();
 

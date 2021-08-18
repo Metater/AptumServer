@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AptumClient
 {
-    public class AptumClientState
+    public class State
     {
         public bool creatingLobby = false;
         public bool joiningLobby = false;
