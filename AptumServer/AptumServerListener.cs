@@ -115,8 +115,9 @@ namespace AptumServer
         }
         private void OnRequestStartGameReceived(RequestStartGamePacket packet, NetPeer peer)
         {
-            //int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
-            //bool inGame = aptumServer.ClientIdInGame(clientId);
+            int clientId = aptumServer.peerClientIdMap.GetClientId(peer);
+            bool inGame = gameManager.IsClientIdInGame(clientId);
+            if (inGame) return;
         }
         private void OnRequestPlacePieceReceived(RequestPlacePiecePacket packet, NetPeer peer)
         {
