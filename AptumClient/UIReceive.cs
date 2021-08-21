@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using AptumShared.Enums;
 
 namespace AptumClient
 {
@@ -14,11 +15,16 @@ namespace AptumClient
         // Welcome
         public void SingleplayerButton()
         {
-
+            AptumClientManager.I.uiSendUpdate.SetUIState(UIState.Game);
         }
         public void MultiplayerButton()
         {
-
+            if (AptumClientManager.I.State.isConnected)
+            {
+                AptumClientManager.I.uiSendUpdate.DisplayMessage("Could not connect to servers", 5);
+                return;
+            }
+            AptumClientManager.I.uiSendUpdate.SetUIState(UIState.Selection);
         }
         public void QuitButton()
         {
