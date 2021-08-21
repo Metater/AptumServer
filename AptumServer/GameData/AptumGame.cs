@@ -25,7 +25,7 @@ namespace AptumServer.GameData
             int tries = 0;
             while (aptumServer.gameManager.joinCodeGameMap.ContainsKey(joinCode) || joinCode == -1)
             {
-                if (tries >= 100) throw new Exception("Need larger join code!");
+                if (tries > 100) throw new Exception("Need larger join code!");
                 joinCode = aptumServer.rand.Next(1000);
                 tries++;
             }
