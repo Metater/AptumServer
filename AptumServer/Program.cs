@@ -37,6 +37,7 @@ namespace AptumServer
                 {
                     timerTicks -= TimePerTick;
                     aptumServer.Tick(nextTickId);
+                    Console.WriteLine("Tick: " + nextTickId);
                     nextTickId++;
                 }
                 Thread.Sleep(1);
