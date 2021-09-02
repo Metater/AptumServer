@@ -32,7 +32,7 @@ namespace AptumClient
             Graphics = new Graphics();
             Network = new Network();
 
-            networkUpdate.Connect("192.168.1.92", 12733, "Aptum");
+            networkUpdate.Connect("192.168.1.84", 12733, "Aptum");
         }
     }
 }

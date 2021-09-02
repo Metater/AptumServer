@@ -7,7 +7,8 @@ namespace AptumServer
     class Program
     {
         public const double TPS = 20;
-        public const long SystemTPS = 10000000;
+        //public const long SystemTPS = 10000000; // Windows
+        public const long SystemTPS = 1000000000; // Linux
         public const long TimePerTick = (long)(SystemTPS / TPS);
 
         static void Main(string[] args)
@@ -37,7 +38,7 @@ namespace AptumServer
                 {
                     timerTicks -= TimePerTick;
                     aptumServer.Tick(nextTickId);
-                    Console.WriteLine("Tick: " + nextTickId);
+                    //Console.WriteLine("Tick: " + nextTickId);
                     nextTickId++;
                 }
                 Thread.Sleep(1);
