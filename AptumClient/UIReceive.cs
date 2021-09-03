@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using AptumShared.Enums;
+using AptumShared.Packets;
 
 namespace AptumClient
 {
@@ -36,7 +37,9 @@ namespace AptumClient
         {
             if (!NameCheck(name)) return;
 
-            // Request create lobby
+            RequestCreateLobbyPacket packet = new RequestCreateLobbyPacket
+            { LeaderName = name };
+            AptumClientManager.I.netSendUpdate.Send(packet);
 
             AptumClientManager.I.State.creatingLobby = true;
             AptumClientManager.I.uiSendUpdate.DisplayMessage("Creating Lobby...", 5);
@@ -53,7 +56,9 @@ namespace AptumClient
                     return;
                 }
 
-                // Request join
+                RequestJoinLobbyPacket packet = new RequestJoinLobbyPacket
+                { JoinCode = joinCode };
+                AptumClientManager.I.netSendUpdate.Send(packet);
 
                 AptumClientManager.I.State.joiningLobby = true;
                 AptumClientManager.I.uiSendUpdate.DisplayMessage("Joining Lobby...", 5);
