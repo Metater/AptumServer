@@ -83,7 +83,7 @@ namespace AptumServer.GameData
             {
                 if (id == players[i].id)
                 {
-                    players.RemoveAt(id);
+                    players.RemoveAt(i);
                     if (i == 0) KillGame();
                     return;
                 }
